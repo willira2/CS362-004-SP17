@@ -87,7 +87,7 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
 		   struct gameState *state);
 /* Responsible for initializing all supplies, and shuffling deck and
    drawing starting hands for all players.  Check that 10 cards selected
-   are in fact (different) kingdom cards, and that numPlayers is valid.
+   are in fact (different) kingdom cards, and that numPlayers is valid. 
 
 Cards not in game should initialize supply position to -1 */
 
@@ -130,11 +130,26 @@ int getWinners(int players[MAX_PLAYERS], struct gameState *state);
 /* Set array position of each player who won (remember ties!) to
    1, others to 0 */
 
-int playAdventurer(struct gameState *state);
-int playSmithy(struct gameState *state, int handPos);
-int playVillage(struct gameState *state, int handPos);
-int playFeast(struct gameState *state, int choice1);
-int playCouncil_Room(struct gameState *state, int handPos);
-
+//new functions 4-12-17
+int playAdventurer(struct gameState *state, int currentPlayer); //BUGGED
+//int playCouncilRoom(int currentPlayer, struct gameState *state, int handPos);
+//int playFeast(int currentPlayer, struct gameState *state, int temphand[], int choice1);
+//int playGardens();
+//int playMine(int currentPlayer, struct gameState *state, int choice1, int choice2, int handPos);
+//int playRemodel(int currentPlayer, struct gameState *state, int choice1, int choice2, int handPos);
+int playSmithy(int currentPlayer, struct gameState *state, int handPos); //BUGGED
+int playVillage(int currentPlayer, struct gameState *state, int handPos); //BUGGED
+//int playBaron(int currentPlayer, struct gameState *state, int choice1);
+int playGreatHall(int currentPlayer, struct gameState *state, int handPos); //NOT BUGGED
+//int playMinion(int currentPlayer, struct gameState *state, int handPos, int choice1, int choice2);
+//int playSteward(int currentPlayer, struct gameState *state, int handPos, int choice1, int choice2, int choice3);
+//int playTribute(int currentPlayer, struct gameState *state, int nextPlayer);
+//int playAmbassador(int currentPlayer, struct gameState *state, int choice1, int choice2, int handPos);
+//int playCutpurse(int currentPlayer, struct gameState *state, int handPos);
+//int playEmbargo(int currentPlayer, struct gameState *state, int handPos, int choice1);
+//int playOutpost(int currentPlayer, struct gameState *state, int handPos);
+//int playSalvager(int currentPlayer, struct gameState *state, int handPos, int choice1);
+int playSeaHag(int currentPlayer, struct gameState *state); //BUGGED
+//int playTreasureMap(int currentPlayer, struct gameState *state, int handPos);
 
 #endif
