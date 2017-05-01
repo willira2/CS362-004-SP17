@@ -1,4 +1,4 @@
-CFLAGS = -Wall -fpic -coverage -lm
+CFLAGS = -Wall -fpic -coverage -lm -std=c99
 
 rngs.o: rngs.h rngs.c
 	gcc -c rngs.c -g  $(CFLAGS)
@@ -32,6 +32,84 @@ runtests: testDrawCard
 
 player: player.c interface.o
 	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
+
+unittest1: unittest1.c dominion.o rngs.o
+	gcc -o unittest1 -g unittest1.c dominion.o rngs.o -ftest-coverage -fprofile-arcs $(CFLAGS)
+
+unittest2: unittest2.c dominion.o rngs.o
+	gcc -o unittest2 -g unittest2.c dominion.o rngs.o -ftest-coverage -fprofile-arcs $(CFLAGS)
+
+unittest3: unittest3.c dominion.o rngs.o
+	gcc -o unittest3 -g unittest3.c dominion.o rngs.o -ftest-coverage -fprofile-arcs $(CFLAGS)
+
+unittest4: unittest4.c dominion.o rngs.o
+	gcc -o unittest4 -g unittest4.c dominion.o rngs.o -ftest-coverage -fprofile-arcs $(CFLAGS)
+
+cardtest1: cardtest1.c dominion.o rngs.o
+	gcc -o cardtest1 -g cardtest1.c dominion.o rngs.o -ftest-coverage -fprofile-arcs $(CFLAGS)
+
+cardtest2: cardtest2.c dominion.o rngs.o
+	gcc -o cardtest2 -g cardtest2.c dominion.o rngs.o -ftest-coverage -fprofile-arcs $(CFLAGS)
+
+cardtest3: cardtest3.c dominion.o rngs.o
+	gcc -o cardtest3 -g cardtest3.c dominion.o rngs.o -ftest-coverage -fprofile-arcs $(CFLAGS)
+
+cardtest4: cardtest4.c dominion.o rngs.o
+	gcc -o cardtest4 -g cardtest4.c dominion.o rngs.o -ftest-coverage -fprofile-arcs $(CFLAGS)
+
+unittestresults.out: unittest1.c unittest2.c unittest3.c unittest4.c cardtest1.c cardtest2.c cardtest3.c cardtest4.c dominion.c rngs.c
+	echo "Results from running all tests: " > unittestresults.out
+
+	echo "unittest1.c" >> unittestresults.out
+	make clean
+	make unittest1
+	./unittest1 >> unittestresults.out	
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	 
+	echo "unittest2.c" >> unittestresults.out
+	make clean
+	make unittest2
+	./unittest2 >> unittestresults.out	
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	
+	echo "unittest3.c" >> unittestresults.out
+	make clean
+	make unittest3
+	./unittest3 >> unittestresults.out	
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+
+	echo "unittest4.c" >> unittestresults.out
+	make clean
+	make unittest4
+	./unittest4 >> unittestresults.out	
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	
+	echo "cardtest1.c" >> unittestresults.out
+	make clean
+	make cardtest1
+	./cardtest1 >> unittestresults.out	
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	
+	echo "cardtest2.c" >> unittestresults.out
+	make clean
+	make cardtest2
+	./cardtest2 >> unittestresults.out	
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	
+	echo "cardtest3.c" >> unittestresults.out
+	make clean
+	make cardtest3
+	./cardtest3 >> unittestresults.out	
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	
+	echo "cardtest4.c removed from makefile due to segfault" >> unittestresults.out
 
 all: playdom player testDrawCard testBuyCard badTestDrawCard
 

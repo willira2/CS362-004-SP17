@@ -5,6 +5,8 @@
 #include <math.h>
 #include <stdlib.h>
 
+// set NOISY_TEST to 0 to remove printfs from output
+#define NOISY_TEST 1
 
 
 int compare(const void* a, const void* b) {
@@ -108,28 +110,27 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
   for (i = adventurer; i <= treasure_map; i++)       	//loop all cards
     {
       for (j = 0; j < 10; j++)           		//loop chosen cards
-	{
-	  if (kingdomCards[j] == i)
-	    {
-	      //check if card is a 'Victory' Kingdom card
-	      if (kingdomCards[j] == great_hall || kingdomCards[j] == gardens)
-		{
-		  if (numPlayers == 2){ 
-		    state->supplyCount[i] = 8; 
-		  }
-		  else{ state->supplyCount[i] = 12; }
-		}
-	      else
-		{
-		  state->supplyCount[i] = 10;
-		}
-	      break;
-	    }
-	  else    //card is not in the set choosen for the game
-	    {
-	      state->supplyCount[i] = -1;
-	    }
-	}
+    	{
+    	  if (kingdomCards[j] == i)
+    	    {
+    	      //check if card is a 'Victory' Kingdom card
+    	      if (kingdomCards[j] == great_hall || kingdomCards[j] == gardens){
+          		  if (numPlayers == 2){ 
+          		    state->supplyCount[i] = 8; 
+          		  }
+          		  else{ state->supplyCount[i] = 12; }
+    		      }
+    	      
+            else{
+        		  state->supplyCount[i] = 10;
+        		}
+    	      break;
+  	       }
+    	  else    //card is not in the set choosen for the game
+    	    {
+    	      state->supplyCount[i] = -1;
+    	    }
+  	}
 
     }
 
@@ -399,7 +400,7 @@ int isGameOver(struct gameState *state) {
       return 1;
     }
 
-  //if three supply pile are at 0, the game ends
+  //if three supply piles are at 0, the game ends
   j = 0;
   for (i = 0; i < 25; i++)
     {
@@ -559,8 +560,9 @@ int drawCard(int player, struct gameState *state)
     
     deckCounter = state->deckCount[player];//Create a holder for the deck count
 
-    if (deckCounter == 0)
+    if (deckCounter == 0){
       return -1;
+    }
 
     state->hand[player][count] = state->deck[player][deckCounter - 1];//Add card to hand
     state->deckCount[player]--;
@@ -658,9 +660,6 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
   int tributeRevealedCards[2] = {-1, -1};
   int temphand[MAX_HAND];// moved above the if statement
-  int drawntreasure=0;
-  int cardDrawn;
-  int z = 0;// this is the counter for the temp hand
   if (nextPlayer > (state->numPlayers - 1)){
     nextPlayer = 0;
   }
@@ -1176,13 +1175,13 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       state->numBuys++;
 			
       if (choice1)
-	{
-	  //gain coins equal to trashed card
-	  state->coins = state->coins + getCost( handCard(choice1, state) );
-	  //trash card
-	  discardCard(choice1, currentPlayer, state, 1);	
-	}
-			
+        	{
+            //gain coins equal to trashed card
+        	  state->coins = state->coins + getCost(handCard(choice1, state));
+        	  //trash card
+        	  discardCard(choice1, currentPlayer, state, 1);	
+        	}
+        			
       //discard card
       discardCard(handPos, currentPlayer, state, 0);
       return 0;
@@ -1335,6 +1334,7 @@ int discardCard(int handPos, int currentPlayer, struct gameState *state, int tra
   state->hand[currentPlayer][handPos] = -1;
 	
   //remove card from player's hand
+  
   if ( handPos == (state->handCount[currentPlayer] - 1) ) 	//last card in hand array is played
     {
       //reduce number of cards in hand
@@ -1438,25 +1438,32 @@ int playAdventurer(struct gameState *state, int currentPlayer)
 	int temphand[MAX_HAND];
 
 	while(drawntreasure<2){
-		if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
+		
+    if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
 		  shuffle(currentPlayer, state);
 		}
-		drawCard(currentPlayer, state);
+		
+    drawCard(currentPlayer, state);
 		//cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card. CORRECT
 		cardDrawn = state->hand[currentPlayer][0]; //INCORRECT - this is a bug. cardDrawn should be last element in the hand, not first
-		if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
+		
+    if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold){
 		  drawntreasure++;
-		else{
+    }
+		
+    else{
 		  temphand[z]=cardDrawn;
 		  state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
 		  z++;
 		}
 	}
-	  while(z-1>=0){
+	 
+  while(z-1>=0){
 		state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
 		z=z-1;
-	  }
-	return 0;
+	 }
+	
+  return 0;
 }
 
 /*int playCouncilRoom(int currentPlayer, struct gameState *state, int handPos)
@@ -1621,9 +1628,9 @@ int playSmithy(int currentPlayer, struct gameState *state, int handPos)
       //+3 Cards
 	int i;
       for (i = 0; i <= 3; i++) //INCORRECT, THIS IS A BUG. SHOULD BE i < 3 not i <= 3.
-	{
-	  drawCard(currentPlayer, state);
-	}
+    	{
+    	  drawCard(currentPlayer, state);
+    	}
 			
       //discard card from hand
       discardCard(handPos, currentPlayer, state, 0);

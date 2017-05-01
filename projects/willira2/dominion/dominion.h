@@ -19,11 +19,11 @@
 
 enum CARD
   {curse = 0,
-   estate,
+   estate, // 1
    duchy,
    province,
 
-   copper,
+   copper, // 4 
    silver,
    gold,
 
@@ -31,7 +31,7 @@ enum CARD
    /* If no/only 1 treasure found, stop when full deck seen */
    council_room,
    feast, /* choice1 is supply # of card gained) */
-   gardens,
+   gardens, //10
    mine, /* choice1 is hand# of money to trash, choice2 is supply# of
 	    money to put in hand */
    remodel, /* choice1 is hand# of card to remodel, choice2 is supply# */
@@ -46,7 +46,7 @@ enum CARD
    tribute,
 
    ambassador, /* choice1 = hand#, choice2 = number to return to supply */
-   cutpurse,
+   cutpurse, //21
    embargo, /* choice1 = supply# */
    outpost,
    salvager, /* choice1 = hand# to trash */
