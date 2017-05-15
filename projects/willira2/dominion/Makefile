@@ -33,6 +33,15 @@ runtests: testDrawCard
 player: player.c interface.o
 	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
 
+randomtestcard1: dominion.o randomtestcard1.c rngs.o
+	gcc -o randomtestcard1 -g randomtestcard1.c dominion.o rngs.o -ftest-coverage -fprofile-arcs $(CFLAGS)
+
+randomtestcard2: dominion.o randomtestcard2.c rngs.o
+	gcc -o randomtestcard2 -g randomtestcard2.c dominion.o rngs.o -ftest-coverage -fprofile-arcs $(CFLAGS)
+
+randomtestadventurer: dominion.o randomtestadventurer.c rngs.o
+	gcc -o randomtestadventurer -g randomtestadventurer.c dominion.o rngs.o -ftest-coverage -fprofile-arcs $(CFLAGS)
+
 unittest1: unittest1.c dominion.o rngs.o
 	gcc -o unittest1 -g unittest1.c dominion.o rngs.o -ftest-coverage -fprofile-arcs $(CFLAGS)
 
@@ -56,6 +65,33 @@ cardtest3: cardtest3.c dominion.o rngs.o
 
 cardtest4: cardtest4.c dominion.o rngs.o
 	gcc -o cardtest4 -g cardtest4.c dominion.o rngs.o -ftest-coverage -fprofile-arcs $(CFLAGS)
+	
+randomtestcard1.out: randomtestcard1.c dominion.c rngs.c
+	echo "Results from randomtestcard1: " > randomtestcard1.out
+
+	make clean
+	make randomtestcard1
+	./randomtestcard1 >> randomtestcard1.out	
+	gcov dominion.c -b -f >> randomtestcard1.out
+	cat dominion.c.gcov >> randomtestcard1.out
+
+randomtestcard2.out: randomtestcard2.c dominion.c rngs.c
+	echo "Results from randomtestcard2: " > randomtestcard2.out
+
+	make clean
+	make randomtestcard2
+	./randomtestcard2 >> randomtestcard2.out	
+	gcov dominion.c -b -f >> randomtestcard2.out
+	cat dominion.c.gcov >> randomtestcard2.out
+
+randomtestadventurer.out: randomtestadventurer.c dominion.c rngs.c
+	echo "Results from randomtestadventurer: " > randomtestadventurer.out
+
+	make clean
+	make randomtestadventurer
+	./randomtestadventurer >> randomtestadventurer.out	
+	gcov dominion.c -b -f >> randomtestadventurer.out
+	cat dominion.c.gcov >> randomtestadventurer.out
 
 unittestresults.out: unittest1.c unittest2.c unittest3.c unittest4.c cardtest1.c cardtest2.c cardtest3.c cardtest4.c dominion.c rngs.c
 	echo "Results from running all tests: " > unittestresults.out

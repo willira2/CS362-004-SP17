@@ -546,7 +546,6 @@ int drawCard(int player, struct gameState *state)
     shuffle(player, state);//Shuffle the deck up and make it so that we can draw
    
     if (DEBUG){//Debug statements
-      printf("Deck count now: %d\n", state->deckCount[player]);
     }
     
     state->discardCount[player] = 0;
@@ -555,7 +554,6 @@ int drawCard(int player, struct gameState *state)
     count = state->handCount[player];//Get current player's hand count
     
     if (DEBUG){//Debug statements
-      printf("Current hand count: %d\n", count);
     }
     
     deckCounter = state->deckCount[player];//Create a holder for the deck count
@@ -577,6 +575,7 @@ int drawCard(int player, struct gameState *state)
     }
 
     deckCounter = state->deckCount[player];//Create holder for the deck count
+
     state->hand[player][count] = state->deck[player][deckCounter - 1];//Add card to the hand
     state->deckCount[player]--;
     state->handCount[player]++;//Increment hand count
@@ -971,23 +970,22 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case steward:
-      if (choice1 == 1)
-	{
-	  //+2 cards
-	  drawCard(currentPlayer, state);
-	  drawCard(currentPlayer, state);
-	}
-      else if (choice1 == 2)
-	{
-	  //+2 coins
-	  state->coins = state->coins + 2;
-	}
-      else
-	{
-	  //trash 2 cards in hand
-	  discardCard(choice2, currentPlayer, state, 1);
-	  discardCard(choice3, currentPlayer, state, 1);
-	}
+      if (choice1 == 1){
+    	  //+2 cards
+    	  drawCard(currentPlayer, state);
+
+    	  drawCard(currentPlayer, state);
+    	}
+      
+      else if (choice1 == 2){
+    	  //+2 coins
+    	  state->coins = state->coins + 2;
+    	}
+      else{
+    	  //trash 2 cards in hand
+    	  discardCard(choice2, currentPlayer, state, 1);
+    	  discardCard(choice3, currentPlayer, state, 1);
+    	}
 			
       //discard card from hand
       discardCard(handPos, currentPlayer, state, 0);
@@ -1201,28 +1199,29 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       //search hand for another treasure_map
       index = -1;
       for (i = 0; i < state->handCount[currentPlayer]; i++)
-	{
-	  if (state->hand[currentPlayer][i] == treasure_map && i != handPos)
-	    {
-	      index = i;
-	      break;
-	    }
-	}
+    	{
+    	  if (state->hand[currentPlayer][i] == treasure_map && i != handPos)
+    	    {
+    	      index = i;
+    	      break;
+    	    }
+    	}
+      
       if (index > -1)
-	{
-	  //trash both treasure cards
-	  discardCard(handPos, currentPlayer, state, 1);
-	  discardCard(index, currentPlayer, state, 1);
+    	{
+      	  //trash both treasure cards
+      	  discardCard(handPos, currentPlayer, state, 1);
+      	  discardCard(index, currentPlayer, state, 1);
 
-	  //gain 4 Gold cards
-	  for (i = 0; i < 4; i++)
-	    {
-	      gainCard(gold, state, 1, currentPlayer);
-	    }
-				
-	  //return success
-	  return 1;
-	}
+  	  //gain 4 Gold cards
+  	  for (i = 0; i < 4; i++)
+  	    {
+  	      gainCard(gold, state, 1, currentPlayer);
+  	    }
+  				
+  	  //return success
+  	  return 1;
+  	}
 			
       //no second treasure_map found in hand
       return -1;
@@ -1442,11 +1441,10 @@ int playAdventurer(struct gameState *state, int currentPlayer)
     if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
 		  shuffle(currentPlayer, state);
 		}
-		
     drawCard(currentPlayer, state);
 		//cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card. CORRECT
 		cardDrawn = state->hand[currentPlayer][0]; //INCORRECT - this is a bug. cardDrawn should be last element in the hand, not first
-		
+
     if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold){
 		  drawntreasure++;
     }
