@@ -1625,7 +1625,7 @@ int playSmithy(int currentPlayer, struct gameState *state, int handPos)
 {
       //+3 Cards
 	int i;
-      for (i = 0; i <= 3; i++) //INCORRECT, THIS IS A BUG. SHOULD BE i < 3 not i <= 3.
+      for (i = 0; i < 3; i++) //INCORRECT, THIS IS A BUG. SHOULD BE i < 3 not i <= 3.
     	{
     	  drawCard(currentPlayer, state);
     	}
